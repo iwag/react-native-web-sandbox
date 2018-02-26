@@ -1,7 +1,12 @@
 # React Native Web Sandbox 
 
-![](https://i.gyazo.com/45466f3367fc4eef6a3525d31a1782d6.png)
-![](https://i.gyazo.com/5aae94c7799ec08fde9bf5700fd84f18.png)
+Main View
+
+<img src="https://i.gyazo.com/45466f3367fc4eef6a3525d31a1782d6.png" width="400px" />
+
+Detail View
+
+<img src="https://i.gyazo.com/5aae94c7799ec08fde9bf5700fd84f18.png" width="400px" />
 
 # how to start
 
