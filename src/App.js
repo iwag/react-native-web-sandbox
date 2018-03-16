@@ -7,6 +7,7 @@ import Header from './Header.js';
 import Footer from './Footer.js';
 import SimpleNavigator from './SimpleNavigator';
 import Details from './Details';
+import 'whatwg-fetch';
 
 const list_view_styles = StyleSheet.create({
   container: {
@@ -104,22 +105,44 @@ class ListViewDemo extends React.Component {
     super(props);
 
     const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-    this.state = {
-      dataSource: ds.cloneWithRows(data),
-    };
+    this.state ={ isLoading: true};
   }
+
+  // componentDidMount() {
+  //   return fetch('https://facebook.github.io/react-native/movies.json')
+  //     .then((response) => response.json())
+  //     .then((responseJson) => {
+  //       this.setState({
+  //         isLoading: false,
+  //         dataSource: responseJson.movies,
+  //       }, function(){
+  //       });
+  //     })
+  //     .catch((error) =>{
+  //       console.error(error);
+  //     });
+  // }
+
   _onPressItem = (item) => {
     console.log("Pressed row: "+item);
     this.props.nav.linkTo(this, 'personDetails', { item })
   }
 
   render() {
+    if(this.state.isLoading){
+      return(
+        <View style={{flex: 1, padding: 20}}>
+          <ActivityIndicator/>
+        </View>
+      )
+    }
+
     return (
       <ListView
         style={list_view_styles.container}
         dataSource={this.state.dataSource}
 	    renderRow={(data, index) => <ListItem data={data} index={index} onPressItem={(i) => this._onPressItem(i)} />}
-        renderSeparator={(sectionId, rowId) => <View key={rowId} style={list_view_styles.separator} />}
+        // renderSeparator={(sectionId, rowId) => <View key={rowId} style={list_view_styles.separator} />}
         renderHeader={() => <Header />}
         renderFooter={() => <Footer />}
       />
