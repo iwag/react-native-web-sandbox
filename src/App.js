@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import { Image,ActivityIndicator, ListView, AppRegistry, ScrollView, StyleSheet, Text, View, TouchableHighlight } from 'react-native';
-import * as data from './data.json';
 import Header from './Header.js';
 import Footer from './Footer.js';
 import SimpleNavigator from './SimpleNavigator';
@@ -105,23 +104,26 @@ class ListViewDemo extends React.Component {
     super(props);
 
     const ds = new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2});
-    this.state ={ isLoading: true};
+    this.state ={ 
+      isLoading: true,
+      dataSource: ds
+    };
   }
 
-  // componentDidMount() {
-  //   return fetch('https://facebook.github.io/react-native/movies.json')
-  //     .then((response) => response.json())
-  //     .then((responseJson) => {
-  //       this.setState({
-  //         isLoading: false,
-  //         dataSource: responseJson.movies,
-  //       }, function(){
-  //       });
-  //     })
-  //     .catch((error) =>{
-  //       console.error(error);
-  //     });
-  // }
+  componentDidMount() {
+    return fetch('https://gist.githubusercontent.com/iwag/20fd91e5b9010c2529bb86bfb8581ba6/raw/e7917efcbbba847c98b0b2f09548e130a9823d90/data.json')
+      .then((response) => response.json())
+      .then((responseJson) => {
+        this.setState({
+          isLoading: false,
+          dataSource: this.state.dataSource.cloneWithRows(responseJson),
+        }, function(){
+        });
+      })
+      .catch((error) =>{
+        console.error(error);
+      });
+  }
 
   _onPressItem = (item) => {
     console.log("Pressed row: "+item);
@@ -131,7 +133,7 @@ class ListViewDemo extends React.Component {
   render() {
     if(this.state.isLoading){
       return(
-        <View style={{flex: 1, padding: 20}}>
+        <View style={list_view_styles.container} >
           <ActivityIndicator/>
         </View>
       )
@@ -142,7 +144,7 @@ class ListViewDemo extends React.Component {
         style={list_view_styles.container}
         dataSource={this.state.dataSource}
 	    renderRow={(data, index) => <ListItem data={data} index={index} onPressItem={(i) => this._onPressItem(i)} />}
-        // renderSeparator={(sectionId, rowId) => <View key={rowId} style={list_view_styles.separator} />}
+       renderSeparator={(sectionId, rowId) => <View key={rowId} style={list_view_styles.separator} />}
         renderHeader={() => <Header />}
         renderFooter={() => <Footer />}
       />
